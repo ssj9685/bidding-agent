@@ -9,4 +9,8 @@ export class AppService {
   getTest(): string {
     return 'this is test page';
   }
+
+  postTest(): string {
+    return 'post test value';
+  }
 }
