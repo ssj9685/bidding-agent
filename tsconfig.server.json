@@ -17,9 +17,6 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "jsx": "preserve",
-    "extends": "./tsconfig.json",
-    "exclude": ["node_modules", "test", "dist", "**/*spec.ts"],
-    "include": ["src"]
+    "jsx": "preserve"
   }
 }

@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 export class ViewService {
   getIndex() {
     return {
-      title: 'Next with Nest',
+      title: 'Hot reload test2',
     };
   }
 }

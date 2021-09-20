@@ -7,7 +7,7 @@ export class ViewController {
 
   @Get()
   @Render('Index')
-  public index() {
+  public getIndex() {
     return this.viewService.getIndex();
   }
 }
