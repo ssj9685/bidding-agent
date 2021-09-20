@@ -4,7 +4,17 @@ import { Injectable } from '@nestjs/common';
 export class ViewService {
   getIndex() {
     return {
-      title: 'Hot reload test2',
+      title: 'main page',
+    };
+  }
+  getUser() {
+    return {
+      title: 'user page',
+    };
+  }
+  getAgent() {
+    return {
+      title: 'agent page',
     };
   }
 }

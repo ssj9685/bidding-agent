@@ -7,7 +7,17 @@ export class ViewController {
 
   @Get()
   @Render('Index')
-  public getIndex() {
+  getIndex() {
     return this.viewService.getIndex();
+  }
+  @Get('/user')
+  @Render('User')
+  getUser() {
+    return this.viewService.getUser();
+  }
+  @Get('/agent')
+  @Render('Agent')
+  getAgent() {
+    return this.viewService.getAgent();
   }
 }

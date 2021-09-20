@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { NextPage, NextPageContext } from 'next';
-import Link from 'next/link';
 
 // The component's props type
 type PageProps = {
@@ -14,20 +13,18 @@ type PageContext = NextPageContext & {
 
 // react component
 const Page: NextPage<PageProps> = ({ title }) => {
-  const [state, setState] = useState(0);
+  const [state, setState] = useState(false);
+  const onClickCallback = () => {
+    setState(true);
+    console.log(state);
+  };
   useEffect(() => {
-    console.log(state, setState);
     document.title = title;
   });
   return (
     <div>
-      <h1>{title}</h1>
-      <Link href="/agent">
-        <button>대리인</button>
-      </Link>
-      <Link href="/user">
-        <button>사용자</button>
-      </Link>
+      <button onClick={onClickCallback}>거부</button>
+      <button onClick={onClickCallback}>승인</button>
     </div>
   );
 };
