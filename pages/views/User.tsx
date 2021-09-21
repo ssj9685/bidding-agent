@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { NextPage, NextPageContext } from 'next';
 
 // The component's props type
@@ -13,17 +13,43 @@ type PageContext = NextPageContext & {
 
 // react component
 const Page: NextPage<PageProps> = ({ title }) => {
-  const [state, setState] = useState(false);
-  const onClickCallback = () => {
-    setState(true);
-    console.log(state);
-  };
+  const [wsInstance, setWsInstance] = useState(null);
+
+  const onClick = useCallback(() => {
+    const clientName = document.getElementById(
+      'clientName',
+    ) as HTMLInputElement;
+    const data = JSON.stringify({
+      event: 'apply',
+      data: {
+        id: null,
+        payload: clientName.value,
+      },
+    });
+    wsInstance.send(data);
+  }, [wsInstance]);
+
   useEffect(() => {
     document.title = title;
+    if (!wsInstance) {
+      const ws = new WebSocket('ws://localhost:8080');
+      ws.addEventListener('open', (e) => {
+        console.log(e);
+      });
+      ws.addEventListener('message', (e) => {
+        const { event, payload } = JSON.parse(e.data);
+        if (event === 'accept') {
+          alert('your case is accpeted');
+        }
+        console.log(e);
+      });
+      setWsInstance(ws);
+    }
   });
   return (
     <div>
-      <button onClick={onClickCallback}>대리인찾기</button>
+      <input id="clientName" type="text" />
+      <button onClick={onClick}>대리인찾기</button>
     </div>
   );
 };

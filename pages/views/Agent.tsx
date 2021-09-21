@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { NextPage, NextPageContext } from 'next';
 
 // The component's props type
@@ -13,18 +13,73 @@ type PageContext = NextPageContext & {
 
 // react component
 const Page: NextPage<PageProps> = ({ title }) => {
-  const [state, setState] = useState(false);
-  const onClickCallback = () => {
-    setState(true);
-    console.log(state);
-  };
+  const [wsInstance, setWsInstance] = useState(null);
+  const [wsData, setWsData] = useState('');
+  const [wsId, setWsId] = useState(-1);
+
+  const onFind = useCallback(() => {
+    wsInstance.send(
+      JSON.stringify({
+        event: 'find',
+        data: {
+          id: null,
+          payload: '',
+        },
+      }),
+    );
+  }, [wsInstance]);
+
+  const onAccept = useCallback(() => {
+    console.log(wsData);
+    wsInstance.send(
+      JSON.stringify({
+        event: 'accept',
+        data: {
+          id: wsId,
+          payload: wsData,
+        },
+      }),
+    );
+  }, [wsInstance, wsData]);
+
+  const onDecline = useCallback(() => {
+    console.log('decline');
+  }, []);
+
   useEffect(() => {
     document.title = title;
+    if (!wsInstance) {
+      const ws = new WebSocket('ws://localhost:8080');
+      ws.addEventListener('open', (e) => {
+        console.log(e);
+      });
+      ws.addEventListener('message', (e) => {
+        const { event, data } = JSON.parse(e.data);
+        console.log(event, data);
+        switch (event) {
+          case 'request':
+            alert('request comming');
+            setWsData(data);
+            break;
+          case 'find':
+            alert('start find');
+            setWsId(data);
+            break;
+          case 'accepted':
+            alert('already accepted');
+            break;
+        }
+        console.log(e);
+      });
+      setWsInstance(ws);
+    }
   });
+
   return (
     <div>
-      <button onClick={onClickCallback}>거부</button>
-      <button onClick={onClickCallback}>승인</button>
+      <button onClick={onFind}>시작</button>
+      <button onClick={onDecline}>거부</button>
+      <button onClick={onAccept}>승인</button>
     </div>
   );
 };

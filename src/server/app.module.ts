@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { RenderModule } from 'nest-next';
 import { UserModule } from './user/user.module';
 import { ViewModule } from './view/view.module';
+import { AppGateway } from './app.gateway';
 import Next from 'next';
 
 @Module({
@@ -19,6 +20,6 @@ import Next from 'next';
     ViewModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppGateway],
 })
 export class AppModule {}
