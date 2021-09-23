@@ -40,6 +40,7 @@ const Page: NextPage<PageProps> = ({ title }) => {
         const { event, payload } = JSON.parse(e.data);
         if (event === 'accept') {
           alert('your case is accpeted');
+          console.log(payload);
         }
         console.log(e);
       });
@@ -48,6 +49,10 @@ const Page: NextPage<PageProps> = ({ title }) => {
   });
   return (
     <div>
+      <input type="radio" name="method" value="self" />
+      본인입찰
+      <input type="radio" name="method" value="proxy" />
+      대리입찰
       <input id="clientName" type="text" />
       <button onClick={onClick}>대리인찾기</button>
     </div>
