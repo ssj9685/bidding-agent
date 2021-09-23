@@ -61,7 +61,10 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client.send(
       JSON.stringify({
         event: 'find',
-        data: { id: agentId, payload: data.payload },
+        data: {
+          id: agentId,
+          payload: data.payload,
+        },
       }),
     );
   }
@@ -73,7 +76,10 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const ws = this.clientWebsocket.get(clientData.id);
     this.broadcastToOther({
       event: 'accepted',
-      data: clientData,
+      data: {
+        id: id,
+        payload: payload,
+      },
     });
     ws.send(
       JSON.stringify({
