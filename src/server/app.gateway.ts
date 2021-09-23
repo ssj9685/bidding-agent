@@ -29,17 +29,24 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   broadcastToOther({ event, data }) {
-    if (event === 'accepted') {
-      const { id, payload } = data;
-      for (const [key, ws] of this.agentWebsocket) {
-        if (key !== id) {
-          ws.send(
-            JSON.stringify({
-              event: 'accepted',
-              data: { id: null, payload },
-            }),
-          );
-        }
+    switch (event) {
+      case 'matched':
+        this.broadcastToOtherForMatched(data);
+        break;
+    }
+  }
+
+  broadcastToOtherForMatched(data) {
+    const { id, payload } = data;
+    for (const [key, ws] of this.agentWebsocket) {
+      console.log('id', id, 'payload', payload, 'key', key);
+      if (key !== id) {
+        ws.send(
+          JSON.stringify({
+            event: 'matched',
+            data: { id: null, payload },
+          }),
+        );
       }
     }
   }
@@ -69,13 +76,13 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     );
   }
 
-  @SubscribeMessage('accept')
+  @SubscribeMessage('match')
   async handleAccept(client: WebSocket, data: any) {
     const { id, payload } = data;
     const clientData = payload;
     const ws = this.clientWebsocket.get(clientData.id);
     this.broadcastToOther({
-      event: 'accepted',
+      event: 'matched',
       data: {
         id: id,
         payload: payload,
@@ -83,8 +90,14 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     });
     ws.send(
       JSON.stringify({
-        event: 'accept',
+        event: 'match',
         data: { id, payload },
+      }),
+    );
+    client.send(
+      JSON.stringify({
+        event: 'match',
+        data: { id: id, payload: payload },
       }),
     );
   }

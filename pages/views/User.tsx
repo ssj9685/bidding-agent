@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { NextPage, NextPageContext } from 'next';
+import Radio from './components/user/Radio';
 
 // The component's props type
 type PageProps = {
@@ -15,7 +16,7 @@ type PageContext = NextPageContext & {
 const Page: NextPage<PageProps> = ({ title }) => {
   const [wsInstance, setWsInstance] = useState(null);
 
-  const onClick = useCallback(() => {
+  const onFind = useCallback(() => {
     const clientName = document.getElementById(
       'clientName',
     ) as HTMLInputElement;
@@ -37,10 +38,15 @@ const Page: NextPage<PageProps> = ({ title }) => {
         console.log(e);
       });
       ws.addEventListener('message', (e) => {
-        const { event, payload } = JSON.parse(e.data);
-        if (event === 'accept') {
-          alert('your case is accpeted');
-          console.log(payload);
+        const { event, data } = JSON.parse(e.data);
+        switch (event) {
+          case 'apply':
+            alert('finding agent...');
+            break;
+          case 'match':
+            alert('your case is matched');
+            console.log(data);
+            break;
         }
         console.log(e);
       });
@@ -49,12 +55,10 @@ const Page: NextPage<PageProps> = ({ title }) => {
   });
   return (
     <div>
-      <input type="radio" name="method" value="self" />
-      본인입찰
-      <input type="radio" name="method" value="proxy" />
-      대리입찰
+      <Radio name="method" value="self" label="본인입찰" />
+      <Radio name="method" value="proxy" label="대리입찰" />
       <input id="clientName" type="text" />
-      <button onClick={onClick}>대리인찾기</button>
+      <button onClick={onFind}>대리인찾기</button>
     </div>
   );
 };

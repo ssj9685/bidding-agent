@@ -14,8 +14,8 @@ type PageContext = NextPageContext & {
 // react component
 const Page: NextPage<PageProps> = ({ title }) => {
   const [wsInstance, setWsInstance] = useState(null);
-  const [wsData, setWsData] = useState('');
-  const [wsId, setWsId] = useState(-1);
+  const [clientData, setClientData] = useState(null);
+  const [agentId, setAgentId] = useState(-1);
 
   const onFind = useCallback(() => {
     wsInstance.send(
@@ -30,17 +30,18 @@ const Page: NextPage<PageProps> = ({ title }) => {
   }, [wsInstance]);
 
   const onAccept = useCallback(() => {
-    console.log(wsData);
-    wsInstance.send(
-      JSON.stringify({
-        event: 'accept',
-        data: {
-          id: wsId,
-          payload: wsData,
-        },
-      }),
-    );
-  }, [wsInstance, wsData]);
+    if (clientData) {
+      wsInstance.send(
+        JSON.stringify({
+          event: 'match',
+          data: {
+            id: agentId,
+            payload: clientData,
+          },
+        }),
+      );
+    }
+  }, [wsInstance, clientData]);
 
   const onDecline = useCallback(() => {
     console.log('decline');
@@ -59,14 +60,15 @@ const Page: NextPage<PageProps> = ({ title }) => {
         switch (event) {
           case 'request':
             alert('request comming');
-            setWsData(data);
+            setClientData(data);
             break;
           case 'find':
             alert('start find');
-            setWsId(data);
+            setAgentId(data.id);
             break;
-          case 'accepted':
-            alert('already accepted');
+          case 'matched':
+            alert('already matched');
+            setClientData(null);
             break;
         }
         console.log(e);

@@ -1,18 +1,11 @@
-import { NextPage, NextPageContext } from 'next';
-
-type PageProps = {
-  title: string;
-};
-
-// extending the default next context type
-type PageContext = NextPageContext & {
-  query: PageProps;
-};
-
-const Radio: NextPage<PageProps> = () => {
+const Radio = (props) => {
+  const { name, value, label } = props;
   return (
     <div>
-      <div></div>
+      <label>
+        <input type="radio" name={name} value={value} />
+        {label}
+      </label>
     </div>
   );
 };
