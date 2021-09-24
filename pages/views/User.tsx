@@ -57,6 +57,9 @@ const Page: NextPage<PageProps> = ({ title }) => {
     <div>
       <Radio name="method" value="self" label="본인입찰" />
       <Radio name="method" value="proxy" label="대리입찰" />
+      <Radio name="method" value="joint" label="공동입찰" />
+      <Radio name="method" value="proxy" label="전자서명방식" />
+      <Radio name="method" value="proxy" label="서류제출방식" />
       <input id="clientName" type="text" />
       <button onClick={onFind}>대리인찾기</button>
     </div>

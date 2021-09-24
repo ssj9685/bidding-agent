@@ -13,7 +13,7 @@ export const BiddingSession = new mongoose.Schema({
   userId: Number,
   biddingId: Number,
   nowProcess: String,
-  delegate: String,
+  proxy: String,
   otherData: String,
   otherData1: String,
 });
