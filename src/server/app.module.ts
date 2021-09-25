@@ -11,7 +11,10 @@ import Next from 'next';
 @Module({
   imports: [
     RenderModule.forRootAsync(
-      Next({ dev: process.env.NODE_ENV !== 'production' }),
+      Next({
+        dev: process.env.NODE_ENV !== 'production',
+        conf: {},
+      }),
     ),
     MongooseModule.forRoot('mongodb://admin:1234@jxq.kr:27017', {
       useNewUrlParser: true,

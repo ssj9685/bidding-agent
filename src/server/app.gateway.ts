@@ -52,7 +52,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('apply')
-  async handleApply(client: WebSocket, data: any) {
+  async handleApply(client: any, data: any) {
     const clientId = this.clientWebsocket.size;
     this.clientWebsocket.set(clientId, client);
     this.broadcast({
@@ -62,7 +62,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('find')
-  async handleFind(client: WebSocket, data: any) {
+  async handleFind(client: any, data: any) {
     const agentId = this.agentWebsocket.size;
     this.agentWebsocket.set(agentId, client);
     client.send(
@@ -77,7 +77,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('match')
-  async handleAccept(client: WebSocket, data: any) {
+  async handleAccept(client: any, data: any) {
     const { id, payload } = data;
     const clientData = payload;
     const ws = this.clientWebsocket.get(clientData.id);

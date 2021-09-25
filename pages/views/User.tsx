@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { NextPage, NextPageContext } from 'next';
 import Radio from './components/user/Radio';
+import Grid from './components/user/Grid';
 
 // The component's props type
 type PageProps = {
@@ -54,7 +55,7 @@ const Page: NextPage<PageProps> = ({ title }) => {
     }
   });
   return (
-    <div>
+    <Grid>
       <Radio name="method" value="self" label="본인입찰" />
       <Radio name="method" value="proxy" label="대리입찰" />
       <Radio name="method" value="joint" label="공동입찰" />
@@ -62,7 +63,7 @@ const Page: NextPage<PageProps> = ({ title }) => {
       <Radio name="method" value="proxy" label="서류제출방식" />
       <input id="clientName" type="text" />
       <button onClick={onFind}>대리인찾기</button>
-    </div>
+    </Grid>
   );
 };
 

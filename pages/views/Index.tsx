@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
 
@@ -14,9 +14,7 @@ type PageContext = NextPageContext & {
 
 // react component
 const Page: NextPage<PageProps> = ({ title }) => {
-  const [state, setState] = useState(0);
   useEffect(() => {
-    console.log(state, setState);
     document.title = title;
   });
   return (
