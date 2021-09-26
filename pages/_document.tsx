@@ -3,6 +3,8 @@ import { createGlobalStyle, ServerStyleSheet } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   html, body, #__next{
+      display: flex;
+      justify-content: center;
       height: 100%;
       width: 100%;
       padding: 0;

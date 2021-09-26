@@ -18,7 +18,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(this.server.clients.size);
   }
 
-  async handleDisconnect() {
+  async handleDisconnect(client: any) {
+    client.close();
     console.log(this.server.clients.size);
   }
 
@@ -55,6 +56,23 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleApply(client: any, data: any) {
     const clientId = this.clientWebsocket.size;
     this.clientWebsocket.set(clientId, client);
+    client.on('close', () => this.clientWebsocket.delete(clientId));
+    if (!this.agentWebsocket.size) {
+      client.send(
+        JSON.stringify({
+          event: 'noAgent',
+          data: { id: clientId, payload: data.payload },
+        }),
+      );
+      return;
+    }
+    client.send(
+      JSON.stringify({
+        event: 'apply',
+        data: { id: clientId, payload: data.payload },
+      }),
+    );
+
     this.broadcast({
       event: 'request',
       data: { id: clientId, payload: data.payload },
@@ -65,6 +83,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleFind(client: any, data: any) {
     const agentId = this.agentWebsocket.size;
     this.agentWebsocket.set(agentId, client);
+    client.on('close', () => this.agentWebsocket.delete(agentId));
     client.send(
       JSON.stringify({
         event: 'find',

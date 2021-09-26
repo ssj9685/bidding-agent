@@ -2,14 +2,11 @@ import styled from 'styled-components';
 
 const StyledNextButton = styled.button`
   width: 100%;
-  height: 100px;
-  background-color: blue;
+  background-color: darkcyan;
   color: white;
   border: none;
+  font-weight: bold;
   font-size: 1em;
-  @media screen and (max-width: 500px) {
-    height: 80px;
-  }
 `;
 
 const NextButton = (props) => (

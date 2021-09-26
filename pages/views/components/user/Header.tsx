@@ -4,14 +4,12 @@ const StyledHeader = styled.div`
   display: flex;
   position: sticky;
   top: 0;
+  width: 100%;
   align-items: center;
   justify-content: center;
-  background-color: #4400ff;
-  height: 100px;
+  background-color: darkcyan;
   color: white;
-  @media screen and (max-width: 500px) {
-    height: 80px;
-  }
+  font-weight: bold;
 `;
 
 const Header = (props) => <StyledHeader>{props.title}</StyledHeader>;

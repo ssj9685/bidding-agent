@@ -17,8 +17,8 @@ const StyledGrid = styled.div<Props>`
   align-items: ${(props) => props.align};
 `;
 
-const Grid = ({ children, ...props }) => (
-  <StyledGrid {...props}>{children}</StyledGrid>
-);
+const Grid = ({ children, ...props }) => {
+  return <StyledGrid {...props}>{children}</StyledGrid>;
+};
 
 export default Grid;
