@@ -3,8 +3,6 @@ import { createGlobalStyle, ServerStyleSheet } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   html, body, #__next{
-      display: flex;
-      justify-content: center;
       height: 100%;
       width: 100%;
       padding: 0;
@@ -12,6 +10,12 @@ const GlobalStyle = createGlobalStyle`
       font-family: helvetica;
       font-size: 18px;
       word-break: keep-all;
+      min-height: 500px;
+      max-height: 1080px;
+  }
+  #__next{
+    display:flex;
+    justify-content:center;
   }
   input{
     font-size: 1em;

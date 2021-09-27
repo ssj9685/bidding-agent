@@ -33,7 +33,7 @@ const Modal = (props) => {
   return (
     <StyledModal visible={visibleState}>
       <ModalWrapper>
-        <CloseButton onClick={props.onClose}>x</CloseButton>
+        <CloseButton size="16px" onClick={props.onClose}></CloseButton>
         {props.title}
       </ModalWrapper>
     </StyledModal>

@@ -2,10 +2,10 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { NextPage, NextPageContext } from 'next';
 import Main from './components/user/Main';
 import Modal from './components/common/Modal';
-import Header from './components/user/Header';
+import Header from './components/common/Header';
 import Container from './components/common/Container';
-import NextButton from './components/user/FooterButton';
-import GridDiv from './components/user/GridDiv';
+import Button from './components/common/Button';
+import Grid from './components/common/Grid';
 
 // The component's props type
 type PageProps = {
@@ -20,7 +20,7 @@ type PageContext = NextPageContext & {
 // react component
 const Page: NextPage<PageProps> = ({ title }) => {
   const [wsInstance, setWsInstance] = useState(null);
-  const [findTitle, setFindTitle] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
 
   const findAgent = useCallback(() => {
     const clientName = document.querySelectorAll('.userData');
@@ -39,13 +39,13 @@ const Page: NextPage<PageProps> = ({ title }) => {
   }, [wsInstance]);
 
   const closeModal = useCallback(() => {
-    setFindTitle('');
-  }, [setFindTitle]);
+    setModalTitle('');
+  }, [setModalTitle]);
 
   useEffect(() => {
     document.title = title;
     if (!wsInstance) {
-      const ws = new WebSocket('ws://localhost:8080');
+      const ws = new WebSocket('ws://localhost:8080/client');
       ws.addEventListener('open', (e) => {
         console.log(e);
       });
@@ -53,13 +53,13 @@ const Page: NextPage<PageProps> = ({ title }) => {
         const { event, data } = JSON.parse(e.data);
         switch (event) {
           case 'apply':
-            setFindTitle('Finding agent...');
+            setModalTitle('입찰 대리인을 검색중입니다.');
             break;
           case 'noAgent':
-            alert('there is no agent');
+            setModalTitle('입찰 대리인을 찾을 수 없습니다.');
             break;
           case 'match':
-            setFindTitle('your case is matched');
+            setModalTitle('입찰 대리인을 찾았습니다.');
             console.log(data);
             break;
         }
@@ -70,12 +70,12 @@ const Page: NextPage<PageProps> = ({ title }) => {
   });
   return (
     <Container>
-      <GridDiv rows="80px 1fr 80px">
-        <Modal onClose={closeModal} title={findTitle} />
+      <Grid rows="80px 1fr 80px">
+        <Modal onClose={closeModal} title={modalTitle} />
         <Header height="100px" title="입찰금액 및 보증금 납부 방식 선택" />
         <Main />
-        <NextButton onClick={findAgent}>찾기</NextButton>
-      </GridDiv>
+        <Button onClick={findAgent}>찾기</Button>
+      </Grid>
     </Container>
   );
 };

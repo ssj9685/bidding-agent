@@ -1,15 +1,9 @@
 import styled from 'styled-components';
 
-type Props = {
-  justify?: string;
-  align?: string;
-  rows?: string;
-  columns?: string;
-  gap?: string;
-};
-
-const StyledGrid = styled.div<Props>`
+const StyledGrid = styled.div<any>`
   display: grid;
+  width: ${(props) => props.width || '100%'};
+  height: ${(props) => props.height || 'fit-content'};
   grid-gap: ${(props) => props.gap};
   grid-template-rows: ${(props) => props.rows};
   grid-template-columns: ${(props) => props.columns};

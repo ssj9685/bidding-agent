@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-const StyledContainer = styled.div`
-  height: fit-content;
+const StyledContainer = styled.div<any>`
+  position: relative;
+  height: ${(props) => props.height || 'fit-content'};
   width: 1080px;
-  border: 1px lightgray solid;
   @media screen and (max-width: 1080px) {
     width: 640px;
   }

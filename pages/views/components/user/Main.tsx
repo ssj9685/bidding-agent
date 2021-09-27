@@ -1,5 +1,5 @@
 import Radio from './Radio';
-import GridDiv from './GridDiv';
+import GridDiv from '../common/Grid';
 
 const Main = () => {
   return (

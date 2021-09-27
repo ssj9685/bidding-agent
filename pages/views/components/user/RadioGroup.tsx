@@ -1,4 +1,4 @@
-import GridDiv from './GridDiv';
+import GridDiv from '../common/Grid';
 
 const RadioGroup = (props) => {
   return (

@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import { NextPage, NextPageContext } from 'next';
 import Link from 'next/link';
+import Container from './components/common/Container';
+import Grid from './components/common/Grid';
+import Button from './components/common/Button';
+import Header from './components/common/Header';
+import Center from './components/common/Center';
 
 // The component's props type
 type PageProps = {
@@ -18,15 +23,22 @@ const Page: NextPage<PageProps> = ({ title }) => {
     document.title = title;
   });
   return (
-    <div>
-      <h1>{title}</h1>
-      <Link href="/agent">
-        <button>대리인</button>
-      </Link>
-      <Link href="/user">
-        <button>사용자</button>
-      </Link>
-    </div>
+    <Container height="100%">
+      <Grid height="100%" rows="100px 1fr 100px">
+        <Header height="100px" title="부동산 경매 플랫폼" />
+        <Center>
+          <Grid gap="40px" rows="80px 80px" columns="1fr">
+            <Link href="/agent">
+              <Button bgColor="gray">대리인</Button>
+            </Link>
+            <Link href="/user">
+              <Button bgColor="gray">사용자</Button>
+            </Link>
+          </Grid>
+        </Center>
+        <div></div>
+      </Grid>
+    </Container>
   );
 };
 
