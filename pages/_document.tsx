@@ -8,10 +8,13 @@ const GlobalStyle = createGlobalStyle`
       padding: 0;
       margin: 0;
       font-family: helvetica;
-      font-size: 18px;
-      word-break: keep-all;
+      font-size: 14px;
+      word-break: break-word;
       min-height: 500px;
       max-height: 1080px;
+      @media screen and (max-width: 640px){
+        font-size: 16px;
+      }
   }
   #__next{
     display:flex;

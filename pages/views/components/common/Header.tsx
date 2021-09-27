@@ -10,6 +10,7 @@ const StyledHeader = styled.div<any>`
   justify-content: center;
   background-color: darkcyan;
   color: white;
+  font-size: ${(props) => props.fontSize || '1.2em'};
   font-weight: bold;
   @media screen and (max-width: 1080px) {
     width: 100%;

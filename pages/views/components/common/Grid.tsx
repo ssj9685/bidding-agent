@@ -9,6 +9,8 @@ const StyledGrid = styled.div<any>`
   grid-template-columns: ${(props) => props.columns};
   justify-content: ${(props) => props.justify};
   align-items: ${(props) => props.align};
+  background-color: ${(props) => props.gapColor};
+  border: ${(props) => props.border};
 `;
 
 const Grid = ({ children, ...props }) => {

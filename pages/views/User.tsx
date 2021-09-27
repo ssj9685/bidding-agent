@@ -72,7 +72,7 @@ const Page: NextPage<PageProps> = ({ title }) => {
     <Container>
       <Grid rows="80px 1fr 80px">
         <Modal onClose={closeModal} title={modalTitle} />
-        <Header height="100px" title="입찰금액 및 보증금 납부 방식 선택" />
+        <Header title="입찰금액 및 보증금 납부 방식 선택" />
         <Main />
         <Button onClick={findAgent}>찾기</Button>
       </Grid>

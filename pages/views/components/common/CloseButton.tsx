@@ -2,15 +2,15 @@ import styled from 'styled-components';
 
 const CloseButton = styled.div<any>`
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 14px;
+  right: 14px;
   width: ${(props) => props.size};
   height: ${(props) => props.size};
   cursor: pointer;
   &:before,
   &:after {
     position: absolute;
-    content: '.';
+    content: ' ';
     width: 1px;
     height: ${(props) => {
       const crossLength = Number(props.size.match(/\d+/)[0]) * Math.sqrt(2);

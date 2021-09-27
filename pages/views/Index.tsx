@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { NextPage, NextPageContext } from 'next';
-import Link from 'next/link';
 import Container from './components/common/Container';
 import Grid from './components/common/Grid';
 import Button from './components/common/Button';
@@ -27,13 +26,27 @@ const Page: NextPage<PageProps> = ({ title }) => {
       <Grid height="100%" rows="100px 1fr 100px">
         <Header height="100px" title="부동산 경매 플랫폼" />
         <Center>
-          <Grid gap="40px" rows="80px 80px" columns="1fr">
-            <Link href="/agent">
-              <Button bgColor="gray">대리인</Button>
-            </Link>
-            <Link href="/user">
-              <Button bgColor="gray">사용자</Button>
-            </Link>
+          <Grid gap="80px" rows="84px 84px" columns="1fr">
+            <Center>
+              <Button
+                width="320px"
+                radius="2em"
+                bgColor="gray"
+                onClick={() => (location.href = '/agent')}
+              >
+                대리인
+              </Button>
+            </Center>
+            <Center>
+              <Button
+                width="320px"
+                radius="2em"
+                bgColor="gray"
+                onClick={() => (location.href = '/user')}
+              >
+                사용자
+              </Button>
+            </Center>
           </Grid>
         </Center>
         <div></div>
