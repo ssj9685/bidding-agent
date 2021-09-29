@@ -4,8 +4,7 @@ import Main from './components/user/Main';
 import Modal from './components/common/Modal';
 import Header from './components/common/Header';
 import Container from './components/common/Container';
-import Button from './components/common/Button';
-import Grid from './components/common/Grid';
+import FooterButton from './components/user/FooterButton';
 
 // The component's props type
 type PageProps = {
@@ -43,11 +42,15 @@ const Page: NextPage<PageProps> = ({ title }) => {
   }, [setModalTitle]);
 
   useEffect(() => {
-    document.title = title;
+    document.title = '부동산 경매 중개 플랫폼';
+    console.log('server send data', title);
     if (!wsInstance) {
-      const ws = new WebSocket('ws://localhost:8080/client');
+      const ws = new WebSocket('ws://192.168.10.77:8080');
       ws.addEventListener('open', (e) => {
         console.log(e);
+      });
+      ws.addEventListener('error', () => {
+        setModalTitle('네트워크 상태가 좋지 않습니다.');
       });
       ws.addEventListener('message', (e) => {
         const { event, data } = JSON.parse(e.data);
@@ -70,12 +73,10 @@ const Page: NextPage<PageProps> = ({ title }) => {
   });
   return (
     <Container>
-      <Grid rows="80px 1fr 80px">
-        <Modal onClose={closeModal} title={modalTitle} />
-        <Header title="입찰금액 및 보증금 납부 방식 선택" />
-        <Main />
-        <Button onClick={findAgent}>찾기</Button>
-      </Grid>
+      <Modal onClose={closeModal} title={modalTitle} />
+      <Header title="입찰 대행 신청" />
+      <Main />
+      <FooterButton onClick={findAgent}>찾기</FooterButton>
     </Container>
   );
 };

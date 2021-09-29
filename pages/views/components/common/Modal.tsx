@@ -29,7 +29,7 @@ const ModalWrapper = styled.div<any>`
 `;
 
 const Modal = (props) => {
-  const visibleState = props.title.length ? true : false;
+  const visibleState = props.title?.length ? true : false;
   return (
     <StyledModal visible={visibleState}>
       <ModalWrapper>

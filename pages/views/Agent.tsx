@@ -2,11 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { NextPage, NextPageContext } from 'next';
 import Container from './components/common/Container';
 import Main from './components/agent/Main';
-import Grid from './components/common/Grid';
 import Header from './components/common/Header';
-import Button from './components/common/Button';
-import Center from './components/common/Center';
 import Modal from './components/common/Modal';
+import FooterButton from './components/agent/FooterButton';
 
 // The component's props type
 type PageProps = {
@@ -36,6 +34,7 @@ const Page: NextPage<PageProps> = ({ title }) => {
           },
         }),
       );
+      setModalTitle('요청을 수락하였습니다.');
     }
   }, [wsInstance, clientData]);
 
@@ -49,9 +48,10 @@ const Page: NextPage<PageProps> = ({ title }) => {
   }, []);
 
   useEffect(() => {
-    document.title = title;
+    document.title = '부동산 경매 중개 플랫폼';
+    console.log('server send data', title);
     if (!wsInstance) {
-      const ws = new WebSocket('ws://localhost:8080/agent');
+      const ws = new WebSocket('ws://192.168.10.77:8080');
       setWsInstance(ws);
       ws.addEventListener('open', (e) => {
         console.log(e);
@@ -64,6 +64,9 @@ const Page: NextPage<PageProps> = ({ title }) => {
             },
           }),
         );
+        ws.addEventListener('error', () => {
+          setModalTitle('네트워크 상태가 좋지 않습니다.');
+        });
       });
       ws.addEventListener('message', (e) => {
         const { event, data } = JSON.parse(e.data);
@@ -90,18 +93,9 @@ const Page: NextPage<PageProps> = ({ title }) => {
   return (
     <Container height="100%">
       <Modal title={modalTitle} onClose={closeModal} />
-      <Grid height="100%" rows="80px 1fr 80px">
-        <Header fontSize="1.2em" title="부동산 경매 중개인 화면" />
-        <Center>
-          <Main data={clientData} />
-        </Center>
-        <Grid rows="80px" columns="1fr 2fr">
-          <Button bgColor="gray" onClick={onDecline}>
-            거부
-          </Button>
-          <Button onClick={onAccept}>승인</Button>
-        </Grid>
-      </Grid>
+      <Header fontSize="1.2em" title="입찰대행신청건 담당 중개사 선정" />
+      <Main data={clientData} />
+      <FooterButton onDecline={onDecline} onAccept={onAccept} />
     </Container>
   );
 };

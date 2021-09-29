@@ -13,9 +13,18 @@ const CloseButton = styled.div<any>`
     content: ' ';
     width: 1px;
     height: ${(props) => {
-      const crossLength = Number(props.size.match(/\d+/)[0]) * Math.sqrt(2);
-      const lengthUnit = props.size.match(/\D+/)[0];
-      return crossLength.toString() + lengthUnit;
+      const size = String(props.size);
+      const matchedLength = size.match(/\d+/) as Array<string>;
+      const matchedUnit = size.match(/\D+/) as Array<string>;
+      let crossLength: string;
+      let lengthUnit: string;
+      if (matchedLength.length && matchedUnit.length) {
+        crossLength = String(Number(matchedLength[0]) * Math.sqrt(2));
+        lengthUnit = String(matchedUnit[0]);
+        return crossLength + lengthUnit;
+      } else {
+        return '1em';
+      }
     }};
     background-color: gray;
   }

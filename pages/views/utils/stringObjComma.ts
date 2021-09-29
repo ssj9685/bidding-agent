@@ -2,7 +2,8 @@ const stingObjWithComma = (param) => {
   if (typeof param === 'object') {
     for (const [key, value] of Object.entries(param)) {
       if (Number(param) !== NaN) {
-        param[key] = String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        if (!String(value).includes('-'))
+          param[key] = String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
     }
     return param;

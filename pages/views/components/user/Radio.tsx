@@ -1,9 +1,9 @@
 const Radio = (props) => {
   const { name, value, label } = props;
   return (
-    <label>
+    <label style={{ width: '100%' }}>
       <input type="radio" name={name} value={value} />
-      {label}
+      <div>{label}</div>
     </label>
   );
 };

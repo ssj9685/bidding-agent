@@ -3,8 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RenderModule } from 'nest-next';
-import { UserModule } from './user/user.module';
 import { ViewModule } from './view/view.module';
+import { UserModule } from './user/user.module';
 import { AppGateway } from './app.gateway';
 import Next from 'next';
 
@@ -12,6 +12,7 @@ import Next from 'next';
   imports: [
     RenderModule.forRootAsync(
       Next({
+        //dev: false,
         dev: process.env.NODE_ENV !== 'production',
         conf: {},
       }),

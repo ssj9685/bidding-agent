@@ -18,11 +18,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "build:next": "next build"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
+    "@nestjs/microservices": "^8.0.8",
     "@nestjs/mongoose": "^8.0.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/platform-fastify": "^8.0.6",
@@ -33,7 +35,10 @@
     "@types/styled-components": "^5.1.14",
     "@zeit/next-typescript": "^1.1.1",
     "babel-plugin-styled-components": "^1.13.2",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "mongoose": "^6.0.5",
+    "mqtt": "^4.2.8",
     "nest-next": "^9.4.0",
     "next": "^11.1.2",
     "next-pwa": "^5.3.1",

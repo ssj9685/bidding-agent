@@ -19,19 +19,21 @@ type PageContext = NextPageContext & {
 // react component
 const Page: NextPage<PageProps> = ({ title }) => {
   useEffect(() => {
-    document.title = title;
+    document.title = '부동산 경매 중개 플랫폼';
+    console.log('server send data', title);
   });
   return (
     <Container height="100%">
-      <Grid height="100%" rows="100px 1fr 100px">
-        <Header height="100px" title="부동산 경매 플랫폼" />
+      <Grid height="100%" rows="80px 1fr 80px">
+        <Header height="100px" title="부동산 경매 중개 플랫폼" />
+        <div></div>
         <Center>
           <Grid gap="80px" rows="84px 84px" columns="1fr">
             <Center>
               <Button
                 width="320px"
+                height="80px"
                 radius="2em"
-                bgColor="gray"
                 onClick={() => (location.href = '/agent')}
               >
                 대리인
@@ -40,8 +42,8 @@ const Page: NextPage<PageProps> = ({ title }) => {
             <Center>
               <Button
                 width="320px"
+                height="80px"
                 radius="2em"
-                bgColor="gray"
                 onClick={() => (location.href = '/user')}
               >
                 사용자
