@@ -9,9 +9,12 @@ import { EventModule } from './event/event.module';
 import Next from 'next';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ConfigModule } from './config/config.module';
+import { ConfigService } from './config/config.service';
 
 @Module({
   imports: [
+    ConfigModule,
     RenderModule.forRootAsync(
       Next({
         //dev: false,
@@ -19,8 +22,10 @@ import { join } from 'path';
         conf: {},
       }),
     ),
-    MongooseModule.forRoot('mongodb://admin:1234@jxq.kr:27017', {
-      useNewUrlParser: true,
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        configService.getMongoConfig(),
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '.', 'static'),
