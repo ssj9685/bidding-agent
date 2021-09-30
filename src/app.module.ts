@@ -5,8 +5,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { RenderModule } from 'nest-next';
 import { ViewModule } from './view/view.module';
 import { UserModule } from './user/user.module';
-import { AppGateway } from './app.gateway';
+import { MqttModule } from './mqtt/mqtt.module';
+import { EventModule } from './event/event.module';
 import Next from 'next';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -20,10 +23,15 @@ import Next from 'next';
     MongooseModule.forRoot('mongodb://admin:1234@jxq.kr:27017', {
       useNewUrlParser: true,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '.', 'static'),
+    }),
+    EventModule,
+    MqttModule,
     UserModule,
     ViewModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AppGateway],
+  providers: [AppService],
 })
 export class AppModule {}

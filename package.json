@@ -30,6 +30,7 @@
     "@nestjs/platform-fastify": "^8.0.6",
     "@nestjs/platform-socket.io": "^8.0.6",
     "@nestjs/platform-ws": "^8.0.6",
+    "@nestjs/serve-static": "^2.2.2",
     "@nestjs/websockets": "^8.0.6",
     "@types/react": "^17.0.21",
     "@types/styled-components": "^5.1.14",

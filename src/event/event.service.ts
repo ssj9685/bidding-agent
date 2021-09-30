@@ -1,27 +1,11 @@
-import {
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer,
-} from '@nestjs/websockets';
-import { Server } from 'ws';
+import { Injectable } from '@nestjs/common';
+import { MqttService } from 'src/mqtt/mqtt.service';
 
-@WebSocketGateway(8080)
-export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer() server: Server;
-
+@Injectable()
+export class EventService {
+  constructor(private readonly mqttService: MqttService) {}
   clientWebsocket = new Map();
   agentWebsocket = new Map();
-
-  async handleConnection() {
-    console.log(this.server.clients.size);
-  }
-
-  async handleDisconnect(client: any) {
-    client.close();
-    console.log(this.server.clients.size);
-  }
 
   broadcast({ event, data }) {
     for (const ws of this.agentWebsocket.values()) {
@@ -52,11 +36,27 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage('apply')
   async handleApply(client: any, data: any) {
+    /**
+     * maybe this part will replace with db data
+     */
     const clientId = this.clientWebsocket.size;
     this.clientWebsocket.set(clientId, client);
-    client.on('close', () => this.clientWebsocket.delete(clientId));
+
+    /**
+     * This test code will be removed
+     */
+    const subscriber = await this.mqttService.subscribe(
+      `${clientId}`,
+      (topic, payload, packet) => {
+        console.log(topic, payload, packet);
+      },
+    );
+    client.on('close', () => {
+      this.clientWebsocket.delete(clientId);
+      subscriber.end();
+    });
+
     if (!this.agentWebsocket.size) {
       client.send(
         JSON.stringify({
@@ -73,17 +73,41 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }),
     );
 
+    /**
+     * This test code will be removed
+     */
+    await this.mqttService.publish(
+      'request',
+      JSON.stringify({
+        event: 'request',
+        data: { id: clientId, payload: data.payload },
+      }),
+    );
+
     this.broadcast({
       event: 'request',
       data: { id: clientId, payload: data.payload },
     });
   }
 
-  @SubscribeMessage('find')
   async handleFind(client: any, data: any) {
     const agentId = this.agentWebsocket.size;
     this.agentWebsocket.set(agentId, client);
-    client.on('close', () => this.agentWebsocket.delete(agentId));
+
+    /**
+     * This test code will be removed
+     */
+    const subscriber = await this.mqttService.subscribe(
+      'request',
+      (topic, payload, packet) => {
+        console.log(topic, payload, packet);
+      },
+    );
+    client.on('close', () => {
+      this.agentWebsocket.delete(agentId);
+      subscriber.end();
+    });
+
     client.send(
       JSON.stringify({
         event: 'find',
@@ -95,8 +119,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     );
   }
 
-  @SubscribeMessage('match')
-  async handleAccept(client: any, data: any) {
+  async handleMatch(client: any, data: any) {
     const { id, payload } = data;
     const clientData = payload;
     const ws = this.clientWebsocket.get(clientData.id);
