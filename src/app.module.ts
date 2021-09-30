@@ -5,7 +5,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { RenderModule } from 'nest-next';
 import { ViewModule } from './view/view.module';
 import { UserModule } from './user/user.module';
-import { MqttModule } from './mqtt/mqtt.module';
 import { EventModule } from './event/event.module';
 import Next from 'next';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -27,7 +26,6 @@ import { join } from 'path';
       rootPath: join(__dirname, '.', 'static'),
     }),
     EventModule,
-    MqttModule,
     UserModule,
     ViewModule,
   ],
