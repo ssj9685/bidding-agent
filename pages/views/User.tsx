@@ -8,7 +8,7 @@ import FooterButton from './components/user/FooterButton';
 
 // The component's props type
 type PageProps = {
-  title: string;
+  websocketHost: string;
 };
 
 // extending the default next context type
@@ -17,7 +17,7 @@ type PageContext = NextPageContext & {
 };
 
 // react component
-const Page: NextPage<PageProps> = ({ title }) => {
+const Page: NextPage<PageProps> = (serverData) => {
   const [wsInstance, setWsInstance] = useState(null);
   const [modalTitle, setModalTitle] = useState('');
 
@@ -43,9 +43,10 @@ const Page: NextPage<PageProps> = ({ title }) => {
 
   useEffect(() => {
     document.title = '부동산 경매 중개 플랫폼';
-    console.log('server send data', title);
+    console.log('server send data', serverData);
+    const { websocketHost } = serverData;
     if (!wsInstance) {
-      const ws = new WebSocket('ws://192.168.10.77:8080');
+      const ws = new WebSocket(`ws://${websocketHost}`);
       ws.addEventListener('open', (e) => {
         console.log(e);
       });
@@ -84,7 +85,7 @@ const Page: NextPage<PageProps> = ({ title }) => {
 // assigning the initial props to the component's props
 Page.getInitialProps = (ctx: PageContext) => {
   return {
-    title: ctx.query.title,
+    websocketHost: ctx.query.websocketHost,
   };
 };
 

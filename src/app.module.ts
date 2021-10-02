@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -9,12 +10,10 @@ import { EventModule } from './event/event.module';
 import Next from 'next';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { ConfigModule } from './config/config.module';
-import { ConfigService } from './config/config.service';
 
 @Module({
   imports: [
-    ConfigModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     RenderModule.forRootAsync(
       Next({
         //dev: false,
@@ -22,11 +21,9 @@ import { ConfigService } from './config/config.service';
         conf: {},
       }),
     ),
-    MongooseModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        configService.getMongoConfig(),
-    }),
+    MongooseModule.forRoot(
+      `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}`,
+    ),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '.', 'static'),
     }),

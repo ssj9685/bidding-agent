@@ -9,12 +9,12 @@ export class ViewService {
   }
   getUser() {
     return {
-      title: 'user page',
+      websocketHost: process.env.WEBSOCKET_HOST,
     };
   }
   getAgent() {
     return {
-      title: 'agent page',
+      websocketHost: process.env.WEBSOCKET_HOST,
     };
   }
 }
