@@ -28,7 +28,7 @@ const Page: NextPage<PageProps> = ({ title }) => {
         <Header height="100px" title="부동산 경매 중개 플랫폼" />
         <div></div>
         <Center>
-          <Grid gap="80px" rows="84px 84px" columns="1fr">
+          <Grid gap="80px" rows="repeat(3, 80px)" columns="1fr">
             <Center>
               <Button
                 width="320px"
@@ -47,6 +47,16 @@ const Page: NextPage<PageProps> = ({ title }) => {
                 onClick={() => (location.href = '/user')}
               >
                 사용자
+              </Button>
+            </Center>
+            <Center>
+              <Button
+                width="320px"
+                height="80px"
+                radius="2em"
+                onClick={() => (location.href = '/signup')}
+              >
+                회원가입
               </Button>
             </Center>
           </Grid>

@@ -15,7 +15,7 @@ const StyledHeader = styled.div<any>`
     top: 0;
     left: 0px;
     width: 100%;
-    height: 80px;
+    height: ${(props) => props.height || '80px'};
   }
 `;
 

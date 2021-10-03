@@ -13,8 +13,8 @@ export class UserService {
     return createUser.save();
   }
 
-  async findUser(query): Promise<User[]> {
-    return this.userModel.find(query).exec();
+  async findUser(query): Promise<User> {
+    return this.userModel.findOne(query).exec();
   }
 
   async findAll(): Promise<User[]> {

@@ -7,6 +7,11 @@ export class ViewService {
       title: 'main page',
     };
   }
+  getSignup() {
+    return {
+      title: 'signup page',
+    };
+  }
   getUser() {
     return {
       websocketHost: process.env.WEBSOCKET_HOST,

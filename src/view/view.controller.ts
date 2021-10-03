@@ -10,6 +10,11 @@ export class ViewController {
   getIndex() {
     return this.viewService.getIndex();
   }
+  @Get('/signup')
+  @Render('Signup')
+  getSignup() {
+    return this.viewService.getSignup();
+  }
   @Get('/user')
   @Render('User')
   getUser() {
