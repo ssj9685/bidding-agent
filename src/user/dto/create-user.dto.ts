@@ -6,6 +6,9 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmpty()
+  password: string;
+
+  @IsNotEmpty()
   name: string;
 
   @IsMobilePhone('ko-KR')

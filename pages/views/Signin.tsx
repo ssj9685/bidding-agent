@@ -5,6 +5,7 @@ import Header from './components/common/Header';
 import Center from './components/common/Center';
 import Button from './components/common/Button';
 import Footer from './components/common/Footer';
+import fetchHandler from './utils/fetchHandler';
 
 // The component's props type
 type PageProps = {
@@ -21,17 +22,20 @@ const Page: NextPage<PageProps> = ({ title }) => {
   useEffect(() => {
     document.title = '부동산 경매 중개 플랫폼';
     console.log('server send data', title);
-    console.log('element test', document.getElementById('email'));
   });
   return (
     <Container height="100%">
-      <Header title="회원 가입" />
+      <Header title="로그인" />
       <Center direction="column">
-        <input id="email" placeholder="이메일" />
-        <input id="name" placeholder="이름" />
-        <input type="password" id="password" placeholder="비밀번호" />
-        <input id="phone" placeholder="휴대폰 번호" />
-        <input id="residence" placeholder="거주지" />
+        <Center direction="column">
+          <input id="email" name="email" placeholder="이메일" />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="비밀번호"
+          />
+        </Center>
         <Footer>
           <Button
             onClick={async () => {
@@ -41,29 +45,17 @@ const Page: NextPage<PageProps> = ({ title }) => {
               const password = (
                 document.getElementById('password') as HTMLInputElement
               ).value;
-              const name = (document.getElementById('name') as HTMLInputElement)
-                .value;
-              const phone = (
-                document.getElementById('phone') as HTMLInputElement
-              ).value;
-              const residence = (
-                document.getElementById('residence') as HTMLInputElement
-              ).value;
-              const result = await fetch('/u', {
+              const sendData = JSON.stringify({ email, password });
+              console.log(sendData);
+              const response = await fetch('/signin', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                  email,
-                  password,
-                  name,
-                  phone,
-                  residence,
-                }),
+                body: sendData,
               });
-              const resultJson = await result.text();
-              console.log(resultJson);
+              fetchHandler(response);
             }}
             height="100%"
           >

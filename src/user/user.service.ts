@@ -8,16 +8,25 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<any> {
     const createUser = new this.userModel(createUserDto);
-    return createUser.save();
+    //Password will be encrypted
+    return new Promise((resolve) => {
+      createUser.save(null, (err, result) => {
+        if (err) {
+          resolve(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
   }
 
   async findUser(query): Promise<User> {
-    return this.userModel.findOne(query).exec();
+    return this.userModel.findOne(query);
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return this.userModel.find();
   }
 }

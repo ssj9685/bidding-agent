@@ -12,6 +12,11 @@ export class ViewService {
       title: 'signup page',
     };
   }
+  getSignin() {
+    return {
+      title: 'signin page',
+    };
+  }
   getUser() {
     return {
       websocketHost: process.env.WEBSOCKET_HOST,
