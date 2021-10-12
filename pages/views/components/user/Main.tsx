@@ -5,11 +5,11 @@ const Main = () => {
   return (
     <Grid align="center" columns="minmax(0, 1fr) 3fr">
       <div>사건번호</div>
-      <input />
+      <input name="caseNumber" className="userData" />
       <div>물건종류</div>
-      <input />
+      <input name="itemType" className="userData" />
       <div>소재지</div>
-      <input />
+      <input name="location" className="userData" />
       <div>입찰방법</div>
       <select name="method" className="userData">
         <option></option>

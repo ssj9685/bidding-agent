@@ -42,10 +42,10 @@ const Page: NextPage<PageProps> = ({ title }) => {
     setModalTitle('');
   }, [setModalTitle]);
 
-  const onDecline = useCallback(() => {
+  const onDecline = () => {
     setClientData(null);
     setModalTitle('요청을 거절하였습니다.');
-  }, []);
+  };
 
   useEffect(() => {
     document.title = '부동산 경매 중개 플랫폼';
@@ -95,7 +95,7 @@ const Page: NextPage<PageProps> = ({ title }) => {
       <Modal title={modalTitle} onClose={closeModal} />
       <Header fontSize="1.2em" title="입찰대행신청건 담당 중개사 선정" />
       <Main data={clientData} />
-      <FooterButton onDecline={onDecline} onAccept={onAccept} />
+      <FooterButton ondecline={onDecline} onaccept={onAccept} />
     </Container>
   );
 };

@@ -18,10 +18,10 @@ const FooterButton = (props) => {
   return (
     <StyledFooter {...props}>
       <Grid height="100%" width="100%" columns="1fr 2fr">
-        <Button bgColor="gray" onClick={props.onDecline}>
+        <Button bgColor="gray" onClick={props.ondecline}>
           거절
         </Button>
-        <Button onClick={props.onAccept}>수락</Button>
+        <Button onClick={props.onaccept}>수락</Button>
       </Grid>
     </StyledFooter>
   );

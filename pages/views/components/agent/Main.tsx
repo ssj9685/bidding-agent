@@ -5,8 +5,16 @@ import Center from '../common/Center';
 const Main = (props) => {
   if (props.data) {
     const payload = props.data.payload;
-    const { method, bidAmount, guarantee, totalPayment, paymentBank } =
-      commer(payload);
+    const {
+      caseNumber,
+      itemType,
+      location,
+      method,
+      bidAmount,
+      guarantee,
+      totalPayment,
+      paymentBank,
+    } = commer(payload);
     return (
       <Grid
         align="center"
@@ -15,8 +23,12 @@ const Main = (props) => {
         columns="1fr 2fr"
       >
         <div>사건번호</div>
-        <div>{props.data.id}</div>
-        <div>방법</div>
+        <div>{caseNumber}</div>
+        <div>물건종류</div>
+        <div>{itemType}</div>
+        <div>소재지</div>
+        <div>{location}</div>
+        <div>입찰방법</div>
         <div>{method}</div>
         <div>입찰금액</div>
         <div>{bidAmount}원</div>
