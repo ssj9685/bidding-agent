@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
       font-family: helvetica;
       font-size: 14px;
       word-break: keep-all;
+      overflow: hidden;
       max-height: 1080px;
       @media screen and (max-width: 640px){
         font-size: 18px;

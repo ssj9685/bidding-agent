@@ -3,7 +3,13 @@ import Grid from '../common/Grid';
 
 const Main = () => {
   return (
-    <Grid align="center" height="100%" padding="8px" columns="1fr 3fr">
+    <Grid align="center" columns="minmax(0, 1fr) 3fr">
+      <div>사건번호</div>
+      <input />
+      <div>물건종류</div>
+      <input />
+      <div>소재지</div>
+      <input />
       <div>입찰방법</div>
       <select name="method" className="userData">
         <option></option>

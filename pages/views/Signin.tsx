@@ -19,6 +19,22 @@ type PageContext = NextPageContext & {
 
 // react component
 const Page: NextPage<PageProps> = ({ title }) => {
+  const onClick = async () => {
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const password = (document.getElementById('password') as HTMLInputElement)
+      .value;
+    const sendData = JSON.stringify({ email, password });
+    console.log(sendData);
+    const response = await fetch('/signin', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: sendData,
+    });
+    fetchHandler(response);
+  };
   useEffect(() => {
     document.title = '부동산 경매 중개 플랫폼';
     console.log('server send data', title);
@@ -35,30 +51,10 @@ const Page: NextPage<PageProps> = ({ title }) => {
             id="password"
             placeholder="비밀번호"
           />
+          <a href="/signup">회원가입</a>
         </Center>
         <Footer>
-          <Button
-            onClick={async () => {
-              const email = (
-                document.getElementById('email') as HTMLInputElement
-              ).value;
-              const password = (
-                document.getElementById('password') as HTMLInputElement
-              ).value;
-              const sendData = JSON.stringify({ email, password });
-              console.log(sendData);
-              const response = await fetch('/signin', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: sendData,
-              });
-              fetchHandler(response);
-            }}
-            height="100%"
-          >
+          <Button onClick={onClick} height="100%">
             다음
           </Button>
         </Footer>
