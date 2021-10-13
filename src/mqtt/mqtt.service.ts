@@ -4,7 +4,7 @@ import { connect, ISubscriptionMap, MqttClient, OnMessageCallback } from 'mqtt';
 @Injectable()
 export class MqttService {
   private createClient() {
-    const client = connect('mqtt://jxq.kr:1883');
+    const client = connect(process.env.MQTT_HOST);
 
     client.on('connect', () => {
       console.log('MQTT connected');

@@ -1,61 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { MqttService } from 'src/mqtt/mqtt.service';
+import { KafkaService } from 'src/kafka/kafka.service';
 
 @Injectable()
 export class EventService {
-  constructor(private readonly mqttService: MqttService) {}
+  constructor(
+    private readonly mqttService: MqttService,
+    private readonly kafkaService: KafkaService,
+  ) {}
   clientWebsocket = new Map();
   agentWebsocket = new Map();
-
-  broadcast({ event, data }) {
-    for (const ws of this.agentWebsocket.values()) {
-      ws.send(JSON.stringify({ event, data }));
-    }
-  }
-
-  broadcastToOther({ event, data }) {
-    switch (event) {
-      case 'matched':
-        this.broadcastToOtherForMatched(data);
-        break;
-    }
-  }
-
-  broadcastToOtherForMatched(data) {
-    const { id, payload } = data;
-    for (const [key, ws] of this.agentWebsocket) {
-      console.log('id', id, 'payload', payload, 'key', key);
-      if (key !== id) {
-        ws.send(
-          JSON.stringify({
-            event: 'matched',
-            data: { id: null, payload },
-          }),
-        );
-      }
-    }
-  }
 
   async handleApply(client: any, data: any) {
     /**
      * maybe this part will replace with db data
      */
-    const clientId = this.clientWebsocket.size;
+    const clientId = String(this.clientWebsocket.size);
     this.clientWebsocket.set(clientId, client);
 
-    /**
-     * This test code will be removed
-     */
-    const subscriber = await this.mqttService.subscribe(
-      `${clientId}`,
-      (topic, payload, packet) => {
-        console.log(topic, payload, packet);
-      },
-    );
     client.on('close', () => {
-      this.clientWebsocket.delete(clientId);
-      subscriber.end();
+      this.clientWebsocket.set(clientId, null);
+      //this.clientWebsocket.delete(clientId);
     });
+
+    const onmessage = (topic, partition, message) => {
+      client.send(
+        JSON.stringify({
+          event: 'match',
+          data: { id: clientId, payload: message },
+        }),
+      );
+    };
+
+    await this.mqttService.publish('createUser', `user${clientId}`);
+
+    const consumer = await this.kafkaService.consume({
+      clientId: `user${clientId}`,
+      groupId: `user${clientId}`,
+      topic: `user${clientId}`,
+      onmessage,
+    });
+
+    client.on('close', () => consumer.stop());
 
     if (!this.agentWebsocket.size) {
       client.send(
@@ -73,39 +59,52 @@ export class EventService {
       }),
     );
 
-    /**
-     * This test code will be removed
-     */
-    await this.mqttService.publish(
+    this.mqttService.publish(
       'request',
-      JSON.stringify({
-        event: 'request',
-        data: { id: clientId, payload: data.payload },
-      }),
+      JSON.stringify({ id: clientId, payload: data.payload }),
     );
-
-    this.broadcast({
-      event: 'request',
-      data: { id: clientId, payload: data.payload },
-    });
   }
 
   async handleFind(client: any, data: any) {
-    const agentId = this.agentWebsocket.size;
+    const agentId = String(this.agentWebsocket.size);
     this.agentWebsocket.set(agentId, client);
 
-    /**
-     * This test code will be removed
-     */
-    const subscriber = await this.mqttService.subscribe(
-      'request',
-      (topic, payload, packet) => {
-        console.log(topic, payload, packet);
-      },
-    );
     client.on('close', () => {
-      this.agentWebsocket.delete(agentId);
-      subscriber.end();
+      this.agentWebsocket.set(agentId, null);
+      //this.agentWebsocket.delete(agentId);
+    });
+
+    const onmessage = (topic, partition, message, other = false) => {
+      console.log('consume test', topic, message);
+      const { id, payload } = JSON.parse(message.value.toString('utf8'));
+      if (other && id === agentId) return;
+      client.send(
+        JSON.stringify({
+          event: topic,
+          data: { id, payload },
+        }),
+      );
+    };
+
+    const requestConsumer = await this.kafkaService.consume({
+      clientId: `agent${agentId}`,
+      groupId: `agent${agentId}`,
+      topic: 'request',
+      onmessage: (topic, partition, message) =>
+        onmessage(topic, partition, message, false),
+    });
+
+    const matchedConsumer = await this.kafkaService.consume({
+      clientId: `agent${agentId}`,
+      groupId: `agent${agentId}`,
+      topic: 'matched',
+      onmessage: (topic, partition, message) =>
+        onmessage(topic, partition, message, true),
+    });
+
+    client.on('close', () => {
+      requestConsumer.stop();
+      matchedConsumer.stop();
     });
 
     client.send(
@@ -121,21 +120,24 @@ export class EventService {
 
   async handleMatch(client: any, data: any) {
     const { id, payload } = data;
-    const clientData = payload;
-    const ws = this.clientWebsocket.get(clientData.id);
-    this.broadcastToOther({
-      event: 'matched',
-      data: {
-        id: id,
-        payload: payload,
-      },
-    });
-    ws.send(
+    const clientId = payload.id;
+
+    await this.mqttService.publish(
+      'matched',
       JSON.stringify({
-        event: 'match',
-        data: { id, payload },
+        id,
+        payload,
       }),
     );
+
+    this.mqttService.publish(
+      `user${clientId}`,
+      JSON.stringify({
+        id: clientId,
+        payload: payload,
+      }),
+    );
+
     client.send(
       JSON.stringify({
         event: 'match',
